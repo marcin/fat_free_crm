@@ -1,4 +1,4 @@
-set :application, "fatfreecrm"
+set :application, "fat_free_crm"
 set :repository,  "git@github.com:marcin/fat_free_crm.git"
 set :scm, "git"
 set :branch, "master"
@@ -8,79 +8,27 @@ set :deploy_via, :remote_cache
 set :use_sudo, false
 set :user, "app"
 
-set :deploy_to, "/app/fatfreecrm"
-set :shared_to, "/app/fatfreecrm/shared"
+set :deploy_to, "/app/fat_free_crm"
+set :shared_to, "/app/fat_free_crm/shared"
 role :app, "siteor.com"
 role :web, "siteor.com"
 role :db,  "siteor.com", :primary => true
 
-#egipt = false
-# task :egipt do
-#   egipt = true
-#   set :deploy_to, "/app/lavina"
-#   set :shared_to, "/mnt/shared/lavina"
-#   role :app, "egipt.lavinaplatform.com"
-#   role :web, "egipt.lavinaplatform.com"
-#   role :db,  "egipt.lavinaplatform.com", :primary => true
-# end
-
-
-# task :urpl do
-#   urpl = true
-#   set :deploy_to, "/app/urpl"  
-#   set :shared_to, "/mnt/shared/urpl"
-#   role :app, "195.66.86.100"
-#   role :web, "195.66.86.100"
-#   role :db,  "195.66.86.100", :primary => true
-# end
-
 
 namespace :deploy do
-  # before 'deploy', "wenus_default"
-  # before 'deploy:upload', "wenus_default"
-  # before 'deploy:restart', "wenus_default"
-  # before 'deploy:migrate', "wenus_default"
-  # before 'deploy:migrations', "wenus_default"
-  
   task :restart, :roles => [:web, :app] do
     run "touch #{deploy_to}/current/tmp/restart.txt"
   end
 end
 
-# task :before_deploy, :roles => [:web, :app] do
-#   Rake::Task["wenus22"].execute
-# end
 
 task :after_deploy, :roles => [:web, :app] do
-  #run "cd #{release_path} && whenever --update-crontab #{application}"
 
-  # if urpl #or egipt
-  #   run "rm #{deploy_to}/current/config/environments/production.rb"        
-  #   run "rm #{deploy_to}/current/config/environments/development.rb"        
-  #   run "rm #{deploy_to}/current/config/environments/test.rb"        
-  #   run "rm #{deploy_to}/current/config/database.yml" 
-  #   run "rm #{deploy_to}/current/config/s3.siteor.yml" 
-  #   run "rm #{deploy_to}/current/config/newrelic.yml" 
-  #   run "rm #{deploy_to}/current/config/*.conf" 
-  #   run "rm -R #{deploy_to}/current/app/views/system/*"
-  #   
-  # 
-  #   run "mv #{deploy_to}/current/config/environments/production.javatech #{deploy_to}/current/config/environments/production.rb"
-  #   run "mv #{deploy_to}/current/config/database.javatech #{deploy_to}/current/config/database.yml"
-  # end
-    
+  run "cp #{deploy_to}/shared/database.yml #{deploy_to}/current/config/database.yml"
+
   run "rm #{deploy_to}/current/config/deploy.rb"
   run "rm #{deploy_to}/current/README.rdoc"
 
-
-  # run "cd #{deploy_to}/current; RAILS_ENV=production script/delayed_job stop"   
-  # run "cd #{deploy_to}/current; RAILS_ENV=production script/delayed_job start"
-
-  # puts "błąd all.css - czekamy 3 min i usuniemy all css"
-  #  sleep(60*3)
-  #  run "rm  #{deploy_to}/current/public/javascripts/all*.js"
-  #  run "rm  #{deploy_to}/current/public/stylesheets/all*.css"
- 
 
 end
 
